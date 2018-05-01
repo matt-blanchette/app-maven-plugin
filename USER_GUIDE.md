@@ -155,7 +155,6 @@ The `deploy` configuration has the following parameters:
 | Parameter             | Description |
 | --------------------- | ----------- |
 | `bucket`              | The Google Cloud Storage bucket used to stage files associated with the deployment. |
-| `deployables`         | The YAML files for the services or configurations you want to deploy. |
 | `project`             | The Google Cloud Project target for this deployment. This parameter may also be specified in `appengine-web.xml` using the `<application>` tag. |
 | `promote`             | Promote the deployed version to receive all traffic. |
 | `server`              | The App Engine server to connect to. Typically, you do not need to change this value. |
@@ -367,7 +366,6 @@ The `deploy` configuration has the following parameters:
 | --------------------- | ----------- |
 | `appEngineDirectory`  | Location of configuration files (cron.yaml, dos.yaml, etc) for configuration specific deployments. |
 | `bucket`              | The Google Cloud Storage bucket used to stage files associated with the deployment. |
-| `deployables`         | The YAML files for the services or configurations you want to deploy. |
 | `imageUrl`            | Deploy with a Docker URL from the Google container registry. |
 | `project`             | The Google Cloud Project target for this deployment. |
 | `promote`             | Promote the deployed version to receive all traffic. |
