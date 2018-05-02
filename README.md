@@ -41,7 +41,7 @@ In your Maven App Engine Java app, add the following plugin to your pom.xml:
 </plugin>
 ```
 
-You can now run commands like `mvn appengine:deploy` in the root folder of your Java application.
+You can now run commands like `mvn package appengine:deploy` in the root folder of your Java application.
 
 # Supported goals
 
@@ -72,7 +72,7 @@ To automatically run the `appengine:genRepoInfoFile` goal during the Maven build
       <phase>prepare-package</phase>
       <goals>
         <goal>genRepoInfoFile</goal>
-        </goals>
+      </goals>
     </execution>
   </executions>
   ...

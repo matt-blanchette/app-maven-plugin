@@ -21,6 +21,10 @@ For both _standard_ and _flexible_ applications, include the plugin in your pom.
 The [Cloud SDK](https://cloud.google.com/sdk) is required for this plugin to
 function. Download and install it before running any tasks.
 
+As of version 2.0.0, App Engine goals no longer fork. In order to run any App Engine goals, you must
+make sure to package your application first (i.e. run `mvn package appengine:<goal>`). You may also
+bind the goals to a lifecycle phase in your pom.xml.
+
 ## App Engine Standard
 The plugin will target the App Engine standard environment if you include an `appengine-web.xml`
 in `src/main/webapp/WEB-INF/`, otherwise it will assume it is an [App Engine flexible](#app-engine-flexible)
@@ -271,6 +275,27 @@ You can pass additional arguments directly to the Dev App Server:
   </additionalArguments>
 </configuration>
 ```
+
+### How can I bind App Engine goals to lifecycle phases in my build file?
+
+You can add something like the following to your pom.xml:
+
+```XML
+<plugin>
+  ...
+  <executions>
+    <execution>
+      <phase>package</phase>
+      <goals>
+        <goal>stage</goal>
+      </goals>
+    </execution>
+  </executions>
+  ...
+</plugin>
+```
+
+In this case, running `mvn package` will automatically run the `appengine:stage` goal afterwards.
 
 ### How can I automatically run the `appengine:genRepoInfoFile` goal during the Maven build workflow?
  
