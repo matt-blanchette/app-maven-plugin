@@ -159,15 +159,97 @@ The `deploy` configuration has the following parameters:
 | Parameter             | Description |
 | --------------------- | ----------- |
 | `bucket`              | The Google Cloud Storage bucket used to stage files associated with the deployment. |
-| `project`             | The Google Cloud Project target for this deployment. This parameter may also be specified in `appengine-web.xml` using the `<application>` tag. |
+| `project`             | The Google Cloud Project target for this deployment. This parameter may also be specified in `appengine-web.xml` using the `<application>` tag.* |
 | `promote`             | Promote the deployed version to receive all traffic. |
 | `server`              | The App Engine server to connect to. Typically, you do not need to change this value. |
 | `stopPreviousVersion` | Stop the previously running version when deploying a new version that receives all traffic. |
-| `version`             | The version of the app that will be created or replaced by this deployment. This parameter may also be specified in `appengine-web.xml` using the `<version>` tag. If you do not specify a version, one will be generated for you by the Cloud SDK. |
+| `version`             | The version of the app that will be created or replaced by this deployment. This parameter may also be specified in `appengine-web.xml` using the `<version>` tag.* If you do not specify a version, one will be generated for you by the Cloud SDK. |
 
-To use parameters defined in `appengine-web.xml`, you must set the system property `deploy.read.appengine.web.xml=true`.
+*To use parameters defined in `appengine-web.xml`, you must set the system property `deploy.read.appengine.web.xml=true`.
+
+## App Engine Flexible
+The plugin will target the App Engine flexible environment if you do **NOT** include an `appengine-web.xml`
+in `src/main/webapp/WEB-INF/`.
+
+### Goals
+For App Engine flexible, the plugin exposes the following goals:
+
+#### Deployment
+
+| Goal             | Description |
+| ---------------- | ----------- |
+| `cloudSdkLogin`  | Login and set the Cloud SDK common configuration user. |
+| `stage`          | Stage an application for deployment. |
+| `deploy`         | Deploy an application. |
+| `deployCron`     | Deploy cron configuration. |
+| `deployDispatch` | Deploy dispatch configuration. |
+| `deployDos`      | Deploy dos configuration. |
+| `deployIndex`    | Deploy datastore index configuration. |
+| `deployQueue`    | Deploy queue configuration. |
+| `deployAll`      | Deploy the application and all of its configuration files at once. |
+
+Once you've [initialized](https://cloud.google.com/sdk/docs/initializing) `gcloud` you can run and deploy
+your application using the defaults provided by the plugin.
+
+To see the generated documentation for goals and parameters including default values, execute the
+following:
+
+```bash
+$  mvn appengine:help -Ddetail
+```
+
+If you wish to customize your configuration, the plugin can be configured using the usual
+`<configuration>` element.
+
+##### Cloud SDK configuration
+
+| Parameter          | Description |
+| ------------------ | ----------- |
+| `cloudSdkHome`     | Location of the Cloud SDK. |
+| `cloudSdkVersion`  | Desired version of the Cloud SDK. (e.g. "192.0.0") |
+
+The Cloud SDK will be installed/updated/verified depending on which parameters are configured:
+
+| Parameters Specified   | Action |
+| ---------------------- | ------ |
+| None                   | Latest version of the Cloud SDK is downloaded and installed. |
+| Both parameters        | Current Cloud SDK installation at `cloudSdkHome` is verified. |
+| `cloudSdkHome` only    | No verification. |
+| `cloudSdkVersion` only | Cloud SDK at specified version is downloaded and installed. |
+
+The Cloud SDK is installed in `$USER_HOME/.cache/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk`
+on Linux, `$USER_HOME/Library/Application Support/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk`
+on OSX, and `%LOCALAPPDATA%/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk` on Windows. 
+The Cloud SDK installation/verification occurs automatically before running any appengine goals.
+
+
+##### Stage
+The `stage` configuration has the following parameters:
+
+| Parameter            | Description |
+| -------------------- | ----------- |
+| `appEngineDirectory` | The directory that contains app.yaml. |
+| `dockerDirectory`    | The directory that contains Dockerfile and other docker context. |
+| `artifact`           | The artifact to deploy (a file, like a .jar or a .war). |
+| `stagingDirectory`   | The directory to which to stage the application |
+
+##### Deploy
+The `deploy` configuration has the following parameters:
+
+| Parameter             | Description |
+| --------------------- | ----------- |
+| `appEngineDirectory`  | Location of configuration files (cron.yaml, dos.yaml, etc) for configuration specific deployments. |
+| `bucket`              | The Google Cloud Storage bucket used to stage files associated with the deployment. |
+| `imageUrl`            | Deploy with a Docker URL from the Google container registry. |
+| `project`             | The Google Cloud Project target for this deployment. |
+| `promote`             | Promote the deployed version to receive all traffic. |
+| `server`              | The App Engine server to connect to. Typically, you do not need to change this value. |
+| `stopPreviousVersion` | Stop the previously running version of this service after deploying a new one that receives all traffic. |
+| `version`             | The version of the app that will be created or replaced by this deployment. If you do not specify a version, one will be generated for you by the Cloud SDK. |
 
 ---
+
+## FAQ
 
 ### How do I deploy my project Configuration Files?
 
@@ -316,84 +398,10 @@ You can add the following to your plugin executions section:
 </plugin>
 ```
 
+### I have a project that supports both flex and standard. How do I control which deployment to use?
+
+The plugin defaults to standard deployment if your project contains a webapp/WEB-INF/appengine-web.xml file. If
+your project also has an appengine/app.yaml and you wish to use flexible deployment, you may temporarily move the
+appengine-web.xml file to a different location before deploying.
+
 ---
-
-## App Engine Flexible
-The plugin will target the App Engine flexible environment if you do **NOT** include an `appengine-web.xml`
-in `src/main/webapp/WEB-INF/`.
-
-### Goals
-For App Engine flexible, the plugin exposes the following goals:
-
-#### Deployment
-
-| Goal             | Description |
-| ---------------- | ----------- |
-| `cloudSdkLogin`  | Login and set the Cloud SDK common configuration user. |
-| `stage`          | Stage an application for deployment. |
-| `deploy`         | Deploy an application. |
-| `deployCron`     | Deploy cron configuration. |
-| `deployDispatch` | Deploy dispatch configuration. |
-| `deployDos`      | Deploy dos configuration. |
-| `deployIndex`    | Deploy datastore index configuration. |
-| `deployQueue`    | Deploy queue configuration. |
-| `deployAll`      | Deploy the application and all of its configuration files at once. |
-
-Once you've [initialized](https://cloud.google.com/sdk/docs/initializing) `gcloud` you can run and deploy
-your application using the defaults provided by the plugin.
-
-To see the generated documentation for goals and parameters including default values, execute the
-following:
-
-```bash
-$  mvn appengine:help -Ddetail
-```
-
-If you wish to customize your configuration, the plugin can be configured using the usual
-`<configuration>` element.
-
-##### Cloud SDK configuration
-
-| Parameter          | Description |
-| ------------------ | ----------- |
-| `cloudSdkHome`     | Location of the Cloud SDK. |
-| `cloudSdkVersion`  | Desired version of the Cloud SDK. (e.g. "192.0.0") |
-
-The Cloud SDK will be installed/updated/verified depending on which parameters are configured:
-
-| Parameters Specified   | Action |
-| ---------------------- | ------ |
-| None                   | Latest version of the Cloud SDK is downloaded and installed. |
-| Both parameters        | Current Cloud SDK installation at `cloudSdkHome` is verified. |
-| `cloudSdkHome` only    | No verification. |
-| `cloudSdkVersion` only | Cloud SDK at specified version is downloaded and installed. |
-
-The Cloud SDK is installed in `$USER_HOME/.cache/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk`
-on Linux, `$USER_HOME/Library/Application Support/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk`
-on OSX, and `%LOCALAPPDATA%/google-cloud-tools-java/managed-cloud-sdk/<version>/google-cloud-sdk` on Windows. 
-The Cloud SDK installation/verification occurs automatically before running any appengine goals.
-
-
-##### Stage
-The `stage` configuration has the following parameters:
-
-| Parameter            | Description |
-| -------------------- | ----------- |
-| `appEngineDirectory` | The directory that contains app.yaml. |
-| `dockerDirectory`    | The directory that contains Dockerfile and other docker context. |
-| `artifact`           | The artifact to deploy (a file, like a .jar or a .war). |
-| `stagingDirectory`   | The directory to which to stage the application |
-
-##### Deploy
-The `deploy` configuration has the following parameters:
-
-| Parameter             | Description |
-| --------------------- | ----------- |
-| `appEngineDirectory`  | Location of configuration files (cron.yaml, dos.yaml, etc) for configuration specific deployments. |
-| `bucket`              | The Google Cloud Storage bucket used to stage files associated with the deployment. |
-| `imageUrl`            | Deploy with a Docker URL from the Google container registry. |
-| `project`             | The Google Cloud Project target for this deployment. |
-| `promote`             | Promote the deployed version to receive all traffic. |
-| `server`              | The App Engine server to connect to. Typically, you do not need to change this value. |
-| `stopPreviousVersion` | Stop the previously running version of this service after deploying a new one that receives all traffic. |
-| `version`             | The version of the app that will be created or replaced by this deployment. If you do not specify a version, one will be generated for you by the Cloud SDK. |
