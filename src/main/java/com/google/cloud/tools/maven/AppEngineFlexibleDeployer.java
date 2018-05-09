@@ -79,10 +79,10 @@ public class AppEngineFlexibleDeployer extends AbstractAppEngineDeployer {
         || deployMojo.project.equals(APPENGINE_CONFIG)) {
       throw new MojoExecutionException(
           "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.project = 'my-project-name'\n"
-              + "2. Set appengine.deploy.project = '"
+              + "1. Set <project>my-project-name</project>\n"
+              + "2. Set <project>"
               + GCLOUD_CONFIG
-              + "' to use project from gcloud config.\n"
+              + "</project> to use project from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects");
@@ -94,11 +94,11 @@ public class AppEngineFlexibleDeployer extends AbstractAppEngineDeployer {
         || deployMojo.version.trim().isEmpty()
         || deployMojo.version.equals(APPENGINE_CONFIG)) {
       throw new MojoExecutionException(
-          "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.version = 'my-version'\n"
-              + "2. Set appengine.deploy.version = '"
+          "Deployment project must be defined or configured to read from system state\n"
+              + "1. Set <version>my-version</version>\n"
+              + "2. Set <version>"
               + GCLOUD_CONFIG
-              + "' to use version from gcloud config.\n"
+              + "</version> to use version from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects");

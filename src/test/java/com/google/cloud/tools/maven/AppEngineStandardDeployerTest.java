@@ -120,16 +120,17 @@ public class AppEngineStandardDeployerTest {
     deployMojo.project = null;
     try {
       appEngineStandardDeployer.updateGcloudProperties();
+      Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
           "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.project = 'my-project-name'\n"
-              + "2. Set appengine.deploy.project = '"
+              + "1. Set <project>my-project-name</project>\n"
+              + "2. Set <project>"
               + APPENGINE_CONFIG
-              + "' to use <application> from appengine-web.xml\n"
-              + "3. Set appengine.deploy.project = '"
+              + "</project> to use <application> from appengine-web.xml\n"
+              + "3. Set <project>"
               + GCLOUD_CONFIG
-              + "' to use project from gcloud config.\n",
+              + "</project> to use project from gcloud config.",
           ex.getMessage());
     }
   }
@@ -141,16 +142,17 @@ public class AppEngineStandardDeployerTest {
     deployMojo.project = PROJECT_BUILD;
     try {
       appEngineStandardDeployer.updateGcloudProperties();
+      Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
           "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.version = 'my-version'\n"
-              + "2. Set appengine.deploy.version = '"
+              + "1. Set <version>my-version</version>\n"
+              + "2. Set <version>"
               + APPENGINE_CONFIG
-              + "' to use <version> from appengine-web.xml\n"
-              + "3. Set appengine.deploy.version = '"
+              + "</version> to use <version> from appengine-web.xml\n"
+              + "3. Set <version>"
               + GCLOUD_CONFIG
-              + "' to use version from gcloud config.\n",
+              + "</version> to use version from gcloud config.",
           ex.getMessage());
     }
   }

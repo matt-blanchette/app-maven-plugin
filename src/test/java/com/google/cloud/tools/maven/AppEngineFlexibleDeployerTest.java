@@ -76,10 +76,10 @@ public class AppEngineFlexibleDeployerTest {
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
           "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.project = 'my-project-name'\n"
-              + "2. Set appengine.deploy.project = '"
+              + "1. Set <project>my-project-name</project>\n"
+              + "2. Set <project>"
               + GCLOUD_CONFIG
-              + "' to use project from gcloud config.\n"
+              + "</project> to use project from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects",
@@ -96,11 +96,11 @@ public class AppEngineFlexibleDeployerTest {
       Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
-          "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.version = 'my-version'\n"
-              + "2. Set appengine.deploy.version = '"
+          "Deployment project must be defined or configured to read from system state\n"
+              + "1. Set <version>my-version</version>\n"
+              + "2. Set <version>"
               + GCLOUD_CONFIG
-              + "' to use version from gcloud config.\n"
+              + "</version> to use version from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects",
@@ -114,13 +114,14 @@ public class AppEngineFlexibleDeployerTest {
     deployMojo.project = null;
     try {
       appEngineStandardDeployer.updateGcloudProperties();
+      Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
           "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.project = 'my-project-name'\n"
-              + "2. Set appengine.deploy.project = '"
+              + "1. Set <project>my-project-name</project>\n"
+              + "2. Set <project>"
               + GCLOUD_CONFIG
-              + "' to use project from gcloud config.\n"
+              + "</project> to use project from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects",
@@ -134,13 +135,14 @@ public class AppEngineFlexibleDeployerTest {
     deployMojo.project = PROJECT_BUILD;
     try {
       appEngineStandardDeployer.updateGcloudProperties();
+      Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
-          "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set appengine.deploy.version = 'my-version'\n"
-              + "2. Set appengine.deploy.version = '"
+          "Deployment project must be defined or configured to read from system state\n"
+              + "1. Set <version>my-version</version>\n"
+              + "2. Set <version>"
               + GCLOUD_CONFIG
-              + "' to use version from gcloud config.\n"
+              + "</version> to use version from gcloud config.\n"
               + "3. Using '"
               + APPENGINE_CONFIG
               + "' is not allowed for flexible environment projects",

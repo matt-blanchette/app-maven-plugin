@@ -14,9 +14,9 @@ All notable changes to this project will be documented in this file.
 * `cloudSdkPath` has been replaced with `cloudSdkHome`. ([#257](../../issues/257))
 * Remove deprecated `appYamls` parameter. ([#162](../../issues/162))
 * `project` and `version` are no longer pulled from the global gcloud state by default. `project`
-must be configured in build.gradle using the `deploy.project` property, or users may use special
+must be configured in pom.xml using the `<project>` configuration property, or users may use special
 keywords for project to specify that they would like to read it from appengine-web.xml
-(`project = "APPENGINE_CONFIG"`) or from gcloud global state (`project = "GCLOUD_CONFIG"`).
+(`<project>APPENGINE_CONFIG</project>"`) or from gcloud global state (`<project>GCLOUD_CONFIG</project>`).
 `version` is also configured the same way. ([#305](../../issues/305))
 * Appengine goals no longer fork. Instead of running `mvn appengine:<goal>`, you must either explicitly run 
 `mvn package appengine:<goal>` or bind the goal to a lifecycle phase in your pom.xml. ([#301](../../issues/301))
