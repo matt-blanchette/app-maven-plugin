@@ -96,7 +96,7 @@ public class AppEngineFlexibleDeployerTest {
       Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
-          "Deployment project must be defined or configured to read from system state\n"
+          "Deployment version must be defined or configured to read from system state\n"
               + "1. Set <version>my-version</version>\n"
               + "2. Set <version>"
               + GCLOUD_CONFIG
@@ -138,7 +138,7 @@ public class AppEngineFlexibleDeployerTest {
       Assert.fail();
     } catch (MojoExecutionException ex) {
       Assert.assertEquals(
-          "Deployment project must be defined or configured to read from system state\n"
+          "Deployment version must be defined or configured to read from system state\n"
               + "1. Set <version>my-version</version>\n"
               + "2. Set <version>"
               + GCLOUD_CONFIG

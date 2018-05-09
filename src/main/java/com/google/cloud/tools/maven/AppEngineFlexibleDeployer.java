@@ -94,7 +94,7 @@ public class AppEngineFlexibleDeployer extends AbstractAppEngineDeployer {
         || deployMojo.version.trim().isEmpty()
         || deployMojo.version.equals(APPENGINE_CONFIG)) {
       throw new MojoExecutionException(
-          "Deployment project must be defined or configured to read from system state\n"
+          "Deployment version must be defined or configured to read from system state\n"
               + "1. Set <version>my-version</version>\n"
               + "2. Set <version>"
               + GCLOUD_CONFIG
