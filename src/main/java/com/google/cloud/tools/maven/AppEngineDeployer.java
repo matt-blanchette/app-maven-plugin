@@ -21,6 +21,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 public interface AppEngineDeployer {
+
+  String GCLOUD_CONFIG = "GCLOUD_CONFIG";
+  String APPENGINE_CONFIG = "APPENGINE_CONFIG";
+
   class Factory {
     static AppEngineDeployer newDeployer(AbstractDeployMojo config) {
       boolean isStandardStaging =
