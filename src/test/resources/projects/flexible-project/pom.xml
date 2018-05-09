@@ -26,8 +26,8 @@
             <!-- required for kokoro gcp_ubuntu b/37217450 -->
             <jvmFlag>-Djava.security.egd=file:/dev/urandom</jvmFlag>
           </jvmFlags>
-          <project>GCLOUD_CONFIG</project>
-          <version>GCLOUD_CONFIG</version>
+          <project>travis-app-maven-plugin</project>
+          <version>1</version>
         </configuration>
         <executions>
           <execution>
