@@ -35,6 +35,26 @@ public class AppEngineFlexibleDeployerTest {
   private static final String GCLOUD_CONFIG = "GCLOUD_CONFIG";
   private static final String APPENGINE_CONFIG = "APPENGINE_CONFIG";
 
+  private static final String CONFIG_PROJECT_ERROR =
+      "Deployment project must be defined or configured to read from system state\n"
+          + "1. Set <project>my-project-name</project>\n"
+          + "2. Set <project>"
+          + GCLOUD_CONFIG
+          + "</project> to use project from gcloud config.\n"
+          + "3. Using <project>"
+          + APPENGINE_CONFIG
+          + "</project> is not allowed for flexible environment projects";
+
+  private static final String CONFIG_VERSION_ERROR =
+      "Deployment version must be defined or configured to read from system state\n"
+          + "1. Set <version>my-version</version>\n"
+          + "2. Set <version>"
+          + GCLOUD_CONFIG
+          + "</version> to use version from gcloud config.\n"
+          + "3. Using <version>"
+          + APPENGINE_CONFIG
+          + "</version> is not allowed for flexible environment projects";
+
   @Rule public TemporaryFolder tempFolder = new TemporaryFolder();
 
   private AbstractDeployMojo deployMojo;
@@ -74,16 +94,7 @@ public class AppEngineFlexibleDeployerTest {
       appEngineStandardDeployer.updateGcloudProperties();
       Assert.fail();
     } catch (MojoExecutionException ex) {
-      Assert.assertEquals(
-          "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set <project>my-project-name</project>\n"
-              + "2. Set <project>"
-              + GCLOUD_CONFIG
-              + "</project> to use project from gcloud config.\n"
-              + "3. Using '"
-              + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects",
-          ex.getMessage());
+      Assert.assertEquals(CONFIG_PROJECT_ERROR, ex.getMessage());
     }
   }
 
@@ -95,16 +106,7 @@ public class AppEngineFlexibleDeployerTest {
       appEngineStandardDeployer.updateGcloudProperties();
       Assert.fail();
     } catch (MojoExecutionException ex) {
-      Assert.assertEquals(
-          "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set <version>my-version</version>\n"
-              + "2. Set <version>"
-              + GCLOUD_CONFIG
-              + "</version> to use version from gcloud config.\n"
-              + "3. Using '"
-              + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects",
-          ex.getMessage());
+      Assert.assertEquals(CONFIG_VERSION_ERROR, ex.getMessage());
     }
   }
 
@@ -116,16 +118,7 @@ public class AppEngineFlexibleDeployerTest {
       appEngineStandardDeployer.updateGcloudProperties();
       Assert.fail();
     } catch (MojoExecutionException ex) {
-      Assert.assertEquals(
-          "Deployment project must be defined or configured to read from system state\n"
-              + "1. Set <project>my-project-name</project>\n"
-              + "2. Set <project>"
-              + GCLOUD_CONFIG
-              + "</project> to use project from gcloud config.\n"
-              + "3. Using '"
-              + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects",
-          ex.getMessage());
+      Assert.assertEquals(CONFIG_PROJECT_ERROR, ex.getMessage());
     }
   }
 
@@ -137,16 +130,7 @@ public class AppEngineFlexibleDeployerTest {
       appEngineStandardDeployer.updateGcloudProperties();
       Assert.fail();
     } catch (MojoExecutionException ex) {
-      Assert.assertEquals(
-          "Deployment version must be defined or configured to read from system state\n"
-              + "1. Set <version>my-version</version>\n"
-              + "2. Set <version>"
-              + GCLOUD_CONFIG
-              + "</version> to use version from gcloud config.\n"
-              + "3. Using '"
-              + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects",
-          ex.getMessage());
+      Assert.assertEquals(CONFIG_VERSION_ERROR, ex.getMessage());
     }
   }
 }

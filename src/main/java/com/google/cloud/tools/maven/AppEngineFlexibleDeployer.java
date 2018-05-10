@@ -86,9 +86,9 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
               + "2. Set <project>"
               + GCLOUD_CONFIG
               + "</project> to use project from gcloud config.\n"
-              + "3. Using '"
+              + "3. Using <project>"
               + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects");
+              + "</project> is not allowed for flexible environment projects");
     } else if (deployMojo.project.equals(GCLOUD_CONFIG)) {
       deployMojo.project = null;
     }
@@ -102,9 +102,9 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
               + "2. Set <version>"
               + GCLOUD_CONFIG
               + "</version> to use version from gcloud config.\n"
-              + "3. Using '"
+              + "3. Using <version>"
               + APPENGINE_CONFIG
-              + "' is not allowed for flexible environment projects");
+              + "</version> is not allowed for flexible environment projects");
     } else if (deployMojo.version.equals(GCLOUD_CONFIG)) {
       deployMojo.version = null;
     }
