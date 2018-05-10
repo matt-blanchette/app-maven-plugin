@@ -23,7 +23,10 @@ import java.nio.file.Path;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-public class AppEngineFlexibleDeployer extends AbstractAppEngineDeployer {
+public class AppEngineFlexibleDeployer implements AppEngineDeployer {
+
+  private AbstractDeployMojo deployMojo;
+  private AppEngineStager stager;
 
   AppEngineFlexibleDeployer(AbstractDeployMojo deployMojo) {
     this(deployMojo, AppEngineStager.Factory.newStager(deployMojo));
@@ -73,7 +76,7 @@ public class AppEngineFlexibleDeployer extends AbstractAppEngineDeployer {
   /** Validates project/version configuration and pulls from appengine-web.xml if necessary */
   @VisibleForTesting
   @Override
-  void updateGcloudProperties() throws MojoExecutionException {
+  public void updateGcloudProperties() throws MojoExecutionException {
     if (deployMojo.project == null
         || deployMojo.project.trim().isEmpty()
         || deployMojo.project.equals(APPENGINE_CONFIG)) {

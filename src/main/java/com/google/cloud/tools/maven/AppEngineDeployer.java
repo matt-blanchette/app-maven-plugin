@@ -38,17 +38,7 @@ public interface AppEngineDeployer {
     }
   }
 
-  void deploy() throws MojoExecutionException, MojoFailureException;
+  void updateGcloudProperties() throws MojoExecutionException;
 
   void deployAll() throws MojoExecutionException, MojoFailureException;
-
-  void deployCron() throws MojoExecutionException, MojoFailureException;
-
-  void deployDispatch() throws MojoExecutionException, MojoFailureException;
-
-  void deployDos() throws MojoExecutionException, MojoFailureException;
-
-  void deployIndex() throws MojoExecutionException, MojoFailureException;
-
-  void deployQueue() throws MojoExecutionException, MojoFailureException;
 }

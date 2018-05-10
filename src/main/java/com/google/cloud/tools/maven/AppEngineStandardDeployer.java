@@ -27,7 +27,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.xml.sax.SAXException;
 
-public class AppEngineStandardDeployer extends AbstractAppEngineDeployer {
+public class AppEngineStandardDeployer implements AppEngineDeployer {
+
+  private AbstractDeployMojo deployMojo;
+  private AppEngineStager stager;
 
   AppEngineStandardDeployer(AbstractDeployMojo deployMojo) {
     this(deployMojo, AppEngineStager.Factory.newStager(deployMojo));
@@ -75,7 +78,7 @@ public class AppEngineStandardDeployer extends AbstractAppEngineDeployer {
   /** Validates project/version configuration and pulls from appengine-web.xml if necessary */
   @VisibleForTesting
   @Override
-  void updateGcloudProperties() throws MojoExecutionException {
+  public void updateGcloudProperties() throws MojoExecutionException {
     File appengineWebXml =
         deployMojo
             .getSourceDirectory()
