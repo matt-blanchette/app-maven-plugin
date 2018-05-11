@@ -16,25 +16,20 @@
 
 package com.google.cloud.tools.maven;
 
-import java.nio.file.Files;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 public interface AppEngineStager {
+
   class Factory {
     static AppEngineStager newStager(StageMojo config) {
-      boolean isStandardStaging =
-          Files.exists(
-              config.sourceDirectory.toPath().resolve("WEB-INF").resolve("appengine-web.xml"));
-      if (isStandardStaging) {
-        return new AppEngineStandardStager(config);
-      } else {
-        return new AppEngineFlexibleStager(config);
-      }
+      return config.isStandardStaging()
+          ? new AppEngineStandardStager()
+          : new AppEngineFlexibleStager();
     }
   }
 
-  void stage() throws MojoExecutionException, MojoFailureException;
+  void stage(StageMojo stageMojo) throws MojoExecutionException, MojoFailureException;
 
-  void configureAppEngineDirectory();
+  void setAppEngineDirectory(StageMojo stageMojo);
 }

@@ -17,6 +17,7 @@
 package com.google.cloud.tools.maven;
 
 import com.google.cloud.tools.appengine.api.AppEngineException;
+import com.google.common.base.Preconditions;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,46 +28,29 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class AppEngineStandardStager implements AppEngineStager {
 
-  private StageMojo stageMojo;
-
-  public AppEngineStandardStager(StageMojo stageMojo) {
-    this.stageMojo = stageMojo;
-  }
-
   @Override
-  public void stage() throws MojoExecutionException, MojoFailureException {
-    stageMojo.getLog().info("Staging the application to: " + stageMojo.stagingDirectory);
+  public void stage(StageMojo stageMojo) throws MojoExecutionException {
+    Preconditions.checkNotNull(stageMojo.getAppEngineDirectory());
+
+    stageMojo.getLog().info("Staging the application to: " + stageMojo.getStagingDirectory());
     stageMojo.getLog().info("Detected App Engine standard environment application.");
 
     // delete staging directory if it exists
-    if (stageMojo.stagingDirectory.exists()) {
-      stageMojo.getLog().info("Deleting the staging directory: " + stageMojo.stagingDirectory);
+    if (stageMojo.getStagingDirectory().exists()) {
+      stageMojo.getLog().info("Deleting the staging directory: " + stageMojo.getStagingDirectory());
       try {
-        FileUtils.deleteDirectory(stageMojo.stagingDirectory);
+        FileUtils.deleteDirectory(stageMojo.getStagingDirectory());
       } catch (IOException ex) {
-        throw new MojoFailureException("Unable to delete staging directory.", ex);
+        throw new MojoExecutionException("Unable to delete staging directory.", ex);
       }
     }
-    if (!stageMojo.stagingDirectory.mkdir()) {
+    if (!stageMojo.getStagingDirectory().mkdir()) {
       throw new MojoExecutionException("Unable to create staging directory");
-    }
-
-    if (stageMojo.appEngineDirectory == null) {
-      stageMojo.appEngineDirectory =
-          stageMojo
-              .mavenProject
-              .getBasedir()
-              .toPath()
-              .resolve("src")
-              .resolve("main")
-              .resolve("appengine")
-              .toFile();
     }
 
     // force runtime to 'java' for compat projects using Java version >1.7
@@ -101,14 +85,14 @@ public class AppEngineStandardStager implements AppEngineStager {
   }
 
   @Override
-  public void configureAppEngineDirectory() {
-    stageMojo.appEngineDirectory =
+  public void setAppEngineDirectory(StageMojo stageMojo) {
+    stageMojo.setAppEngineDirectory(
         stageMojo
-            .stagingDirectory
+            .getStagingDirectory()
             .toPath()
             .resolve("WEB-INF")
             .resolve("appengine-generated")
-            .toFile();
+            .toFile());
   }
 
   private boolean isVm(File appengineWebXml) throws MojoExecutionException {

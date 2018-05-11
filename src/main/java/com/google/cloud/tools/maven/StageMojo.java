@@ -20,6 +20,7 @@ import com.google.cloud.tools.appengine.api.deploy.StageFlexibleConfiguration;
 import com.google.cloud.tools.appengine.api.deploy.StageStandardConfiguration;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
+import java.nio.file.Files;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -38,14 +39,13 @@ public class StageMojo extends CloudSdkMojo
   // Standard & Flexible params
   //////////////////////////////////
 
-  /** The directory to which to stage the application. */
   @Parameter(
     required = true,
     defaultValue = "${project.build.directory}/appengine-staging",
     alias = "stage.stagingDirectory",
     property = "app.stage.stagingDirectory"
   )
-  protected File stagingDirectory;
+  private File stagingDirectory;
 
   ///////////////////////////////////
   // Standard-only params
@@ -80,7 +80,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.enableQuickstart", property = "app.stage.enableQuickstart")
-  protected boolean enableQuickstart;
+  private boolean enableQuickstart;
 
   /**
    * Split large jar files (bigger than 10M) into smaller fragments.
@@ -88,7 +88,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.enableJarSplitting", property = "app.stage.enableJarSplitting")
-  protected boolean enableJarSplitting;
+  private boolean enableJarSplitting;
 
   /**
    * Files that match the list of comma separated SUFFIXES will be excluded from all jars.
@@ -96,7 +96,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.jarSplittingExcludes", property = "app.stage.jarSplittingExcludes")
-  protected String jarSplittingExcludes;
+  private String jarSplittingExcludes;
 
   /**
    * The character encoding to use when compiling JSPs.
@@ -104,7 +104,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.compileEncoding", property = "app.stage.compileEncoding")
-  protected String compileEncoding;
+  private String compileEncoding;
 
   /**
    * Delete the JSP source files after compilation.
@@ -112,7 +112,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.deleteJsps", property = "app.stage.deleteJsps")
-  protected boolean deleteJsps;
+  private boolean deleteJsps;
 
   /**
    * Do not jar the classes generated from JSPs.
@@ -120,7 +120,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.disableJarJsps", property = "app.stage.disableJarJsps")
-  protected boolean disableJarJsps;
+  private boolean disableJarJsps;
 
   /**
    * Jar the WEB-INF/classes content.
@@ -128,7 +128,7 @@ public class StageMojo extends CloudSdkMojo
    * <p>Applies to App Engine standard environment only.
    */
   @Parameter(alias = "stage.enableJarClasses", property = "app.stage.enableJarClasses")
-  protected boolean enableJarClasses;
+  private boolean enableJarClasses;
 
   // always disable update check and do not expose this as a parameter
   private boolean disableUpdateCheck = true;
@@ -146,14 +146,8 @@ public class StageMojo extends CloudSdkMojo
   // Flexible-only params
   ///////////////////////////////////
 
-  /**
-   * The directory that contains app.yaml and other supported App Engine configuration files.
-   *
-   * <p>Applies to App Engine flexible environment only. Defaults to <code>
-   * ${basedir}/src/main/appengine</code>
-   */
   @Parameter(alias = "stage.appEngineDirectory", property = "app.stage.appEngineDirectory")
-  protected File appEngineDirectory;
+  private File appEngineDirectory;
 
   /**
    * The directory containing the Dockerfile and other Docker resources.
@@ -181,7 +175,9 @@ public class StageMojo extends CloudSdkMojo
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    AppEngineStager.Factory.newStager(this).stage();
+    AppEngineStager stager = AppEngineStager.Factory.newStager(this);
+    stager.setAppEngineDirectory(this);
+    stager.stage(this);
   }
 
   @Override
@@ -189,6 +185,7 @@ public class StageMojo extends CloudSdkMojo
     return sourceDirectory;
   }
 
+  /** The directory to which to stage the application. */
   @Override
   public File getStagingDirectory() {
     return stagingDirectory;
@@ -234,6 +231,12 @@ public class StageMojo extends CloudSdkMojo
     return enableJarClasses;
   }
 
+  /**
+   * The directory that contains app.yaml and other supported App Engine configuration files.
+   *
+   * <p>Applies to App Engine flexible environment only. Defaults to <code>
+   * ${basedir}/src/main/appengine</code>
+   */
   @Override
   public File getAppEngineDirectory() {
     return appEngineDirectory;
@@ -267,5 +270,13 @@ public class StageMojo extends CloudSdkMojo
   @VisibleForTesting
   public void setSourceDirectory(File sourceDirectory) {
     this.sourceDirectory = sourceDirectory;
+  }
+
+  public boolean isStandardStaging() {
+    return Files.exists(sourceDirectory.toPath().resolve("WEB-INF").resolve("appengine-web.xml"));
+  }
+
+  public void setAppEngineDirectory(File appEngineDirectory) {
+    this.appEngineDirectory = appEngineDirectory;
   }
 }
