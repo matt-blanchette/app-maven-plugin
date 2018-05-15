@@ -25,10 +25,10 @@ public interface AppEngineDeployer {
 
   class Factory {
 
-    static AppEngineDeployer newDeployer(AbstractDeployMojo config) {
-      return config.isStandardStaging()
-          ? new AppEngineStandardDeployer(config)
-          : new AppEngineFlexibleDeployer(config);
+    static AppEngineDeployer newDeployer(AbstractDeployMojo deployConfiguration) {
+      return deployConfiguration.isStandardStaging()
+          ? new AppEngineStandardDeployer(deployConfiguration)
+          : new AppEngineFlexibleDeployer(deployConfiguration);
     }
   }
 

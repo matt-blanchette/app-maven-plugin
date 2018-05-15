@@ -33,9 +33,17 @@ import org.xml.sax.SAXException;
 
 public class AppEngineStandardStager implements AppEngineStager {
 
+  private final AbstractStageMojo stageMojo;
+  private boolean configured = false;
+
+  public AppEngineStandardStager(AbstractStageMojo stageConfiguration) {
+    this.stageMojo = stageConfiguration;
+  }
+
   @Override
-  public void stage(StageMojo stageMojo) throws MojoExecutionException {
-    Preconditions.checkNotNull(stageMojo.getAppEngineDirectory());
+  public void stage() throws MojoExecutionException {
+    // since staging is all crazy, ensure the application developer has called the override first.
+    Preconditions.checkState(configured, "Must call overrideAppEngineDirectory first");
 
     stageMojo.getLog().info("Staging the application to: " + stageMojo.getStagingDirectory());
     stageMojo.getLog().info("Detected App Engine standard environment application.");
@@ -85,7 +93,8 @@ public class AppEngineStandardStager implements AppEngineStager {
   }
 
   @Override
-  public void setAppEngineDirectory(StageMojo stageMojo) {
+  public void overrideAppEngineDirectory() {
+    configured = true;
     stageMojo.setAppEngineDirectory(
         stageMojo
             .getStagingDirectory()

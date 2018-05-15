@@ -73,7 +73,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_fromBuildConfig() {
+  public void testSetDeploymentProjectAndVersion_fromBuildConfig() {
     deployMojo.setVersion(VERSION_BUILD);
     deployMojo.setProject(PROJECT_BUILD);
     new AppEngineFlexibleDeployer(deployMojo);
@@ -82,7 +82,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_fromGcloud() {
+  public void testSetDeploymentProjectAndVersion_fromGcloud() {
     deployMojo.setVersion(GCLOUD_CONFIG);
     deployMojo.setProject(GCLOUD_CONFIG);
     new AppEngineFlexibleDeployer(deployMojo);
@@ -91,7 +91,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_projectFromAppengineWebXml() {
+  public void testSetDeploymentProjectAndVersion_projectFromAppengineWebXml() {
     deployMojo.setVersion(VERSION_BUILD);
     deployMojo.setProject(APPENGINE_CONFIG);
     try {
@@ -103,7 +103,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_versionFromAppengineWebXml() {
+  public void testSetDeploymentProjectAndVersion_versionFromAppengineWebXml() {
     deployMojo.setVersion(APPENGINE_CONFIG);
     deployMojo.setProject(PROJECT_BUILD);
     try {
@@ -115,7 +115,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_noProjectSet() {
+  public void testSetDeploymentProjectAndVersion_noProjectSet() {
     deployMojo.setVersion(VERSION_BUILD);
     deployMojo.setProject(null);
     try {
@@ -127,7 +127,7 @@ public class AppEngineFlexibleDeployerTest {
   }
 
   @Test
-  public void testUpdateGcloudProperties_noVersionSet() {
+  public void testSetDeploymentProjectAndVersion_noVersionSet() {
     deployMojo.setVersion(null);
     deployMojo.setProject(PROJECT_BUILD);
     try {

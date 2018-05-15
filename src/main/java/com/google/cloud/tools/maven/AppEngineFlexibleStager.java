@@ -24,9 +24,17 @@ import org.apache.maven.plugin.MojoExecutionException;
 
 public class AppEngineFlexibleStager implements AppEngineStager {
 
+  private boolean configured = false;
+  private final AbstractStageMojo stageMojo;
+
+  public AppEngineFlexibleStager(AbstractStageMojo stageConfiguration) {
+    this.stageMojo = stageConfiguration;
+  }
+
   @Override
-  public void stage(StageMojo stageMojo) throws MojoExecutionException {
-    Preconditions.checkNotNull(stageMojo.getAppEngineDirectory());
+  public void stage() throws MojoExecutionException {
+    // since staging is all crazy, ensure the application developer has called the override first.
+    Preconditions.checkState(configured, "Must call overrideAppEngineDirectory first");
 
     stageMojo.getLog().info("Staging the application to: " + stageMojo.getStagingDirectory());
     stageMojo.getLog().info("Detected App Engine flexible environment application.");
@@ -57,7 +65,9 @@ public class AppEngineFlexibleStager implements AppEngineStager {
   }
 
   @Override
-  public void setAppEngineDirectory(StageMojo stageMojo) {
+  public void overrideAppEngineDirectory() {
+    configured = true;
+    // can be user configured
     if (stageMojo.getAppEngineDirectory() == null) {
       stageMojo.setAppEngineDirectory(
           stageMojo

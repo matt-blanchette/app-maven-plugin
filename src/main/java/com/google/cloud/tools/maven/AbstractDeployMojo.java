@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.maven.plugins.annotations.Parameter;
 
-public abstract class AbstractDeployMojo extends StageMojo
+public abstract class AbstractDeployMojo extends AbstractStageMojo
     implements DeployConfiguration, DeployProjectConfigurationConfiguration {
 
   /** This is not configurable by the user. */

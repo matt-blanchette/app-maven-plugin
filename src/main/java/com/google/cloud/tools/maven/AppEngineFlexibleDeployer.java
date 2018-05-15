@@ -29,7 +29,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
   private AppEngineFlexibleStager stager;
 
   AppEngineFlexibleDeployer(AbstractDeployMojo deployMojo) {
-    this(deployMojo, new AppEngineFlexibleStager());
+    this(deployMojo, new AppEngineFlexibleStager(deployMojo));
   }
 
   @VisibleForTesting
@@ -37,25 +37,25 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     this.deployMojo = deployMojo;
     this.stager = stager;
 
-    stager.setAppEngineDirectory(deployMojo);
+    stager.overrideAppEngineDirectory();
     setDeploymentProjectAndVersion();
   }
 
   @Override
   public void deploy() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     deployMojo.setDeployables(ImmutableList.of(deployMojo.getStagingDirectory()));
 
     try {
       deployMojo.getAppEngineFactory().deployment().deploy(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Flexible Application deployment failed", ex);
+      throw new MojoExecutionException("Flexible application deployment failed", ex);
     }
   }
 
   @Override
   public void deployAll() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     ImmutableList.Builder<File> flexDeployables = ImmutableList.builder();
 
     // Look for app.yaml
@@ -85,7 +85,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deploy(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -94,7 +94,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployCron(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -103,7 +103,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployDispatch(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -112,7 +112,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployDos(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -121,7 +121,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployIndex(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -130,7 +130,7 @@ public class AppEngineFlexibleDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployQueue(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 

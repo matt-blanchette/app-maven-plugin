@@ -33,7 +33,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
   private AppEngineStandardStager stager;
 
   AppEngineStandardDeployer(AbstractDeployMojo deployMojo) {
-    this(deployMojo, new AppEngineStandardStager());
+    this(deployMojo, new AppEngineStandardStager(deployMojo));
   }
 
   @VisibleForTesting
@@ -41,26 +41,25 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
     this.deployMojo = deployMojo;
     this.stager = stager;
 
-    stager.setAppEngineDirectory(deployMojo);
+    stager.overrideAppEngineDirectory();
     setDeploymentProjectAndVersion();
   }
 
   @Override
   public void deploy() throws MojoExecutionException {
-    stager.setAppEngineDirectory(deployMojo);
-    stager.stage(deployMojo);
+    stager.stage();
     deployMojo.setDeployables(ImmutableList.of(deployMojo.getStagingDirectory()));
 
     try {
       deployMojo.getAppEngineFactory().deployment().deploy(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Standard Application deployment failed", ex);
+      throw new MojoExecutionException("Standard application deployment failed", ex);
     }
   }
 
   @Override
   public void deployAll() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     ImmutableList.Builder<File> standardDeployables = ImmutableList.builder();
 
     // Look for app.yaml
@@ -94,7 +93,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
 
   @Override
   public void deployCron() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     try {
       deployMojo.getAppEngineFactory().deployment().deployCron(deployMojo);
     } catch (AppEngineException ex) {
@@ -104,7 +103,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
 
   @Override
   public void deployDispatch() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     try {
       deployMojo.getAppEngineFactory().deployment().deployDispatch(deployMojo);
     } catch (AppEngineException ex) {
@@ -114,7 +113,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
 
   @Override
   public void deployDos() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     try {
       deployMojo.getAppEngineFactory().deployment().deployDos(deployMojo);
     } catch (AppEngineException ex) {
@@ -124,21 +123,21 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
 
   @Override
   public void deployIndex() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     try {
       deployMojo.getAppEngineFactory().deployment().deployIndex(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
   @Override
   public void deployQueue() throws MojoExecutionException {
-    stager.stage(deployMojo);
+    stager.stage();
     try {
       deployMojo.getAppEngineFactory().deployment().deployQueue(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 

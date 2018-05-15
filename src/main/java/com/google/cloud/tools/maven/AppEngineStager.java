@@ -17,19 +17,18 @@
 package com.google.cloud.tools.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 
 public interface AppEngineStager {
 
   class Factory {
-    static AppEngineStager newStager(StageMojo config) {
-      return config.isStandardStaging()
-          ? new AppEngineStandardStager()
-          : new AppEngineFlexibleStager();
+    static AppEngineStager newStager(AbstractStageMojo stageConfiguration) {
+      return stageConfiguration.isStandardStaging()
+          ? new AppEngineStandardStager(stageConfiguration)
+          : new AppEngineFlexibleStager(stageConfiguration);
     }
   }
 
-  void stage(StageMojo stageMojo) throws MojoExecutionException, MojoFailureException;
+  void stage() throws MojoExecutionException;
 
-  void setAppEngineDirectory(StageMojo stageMojo);
+  void overrideAppEngineDirectory();
 }

@@ -24,23 +24,17 @@ import com.google.cloud.tools.maven.util.SingleYamlFlexibleDeployTestHelper;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 @RunWith(JUnitParamsRunner.class)
 public class FlexDeployDispatchMojoTest {
 
-  @Mock private MavenProject mavenProject;
-  @InjectMocks private DeployDispatchMojo mojo = new DeployDispatchMojo();
+  private DeployDispatchMojo mojo = new DeployDispatchMojo();
 
   private TemporaryFolder tempFolder = new TemporaryFolder();
 
@@ -49,19 +43,11 @@ public class FlexDeployDispatchMojoTest {
 
   @Rule public TestRule testRule = RuleChain.outerRule(tempFolder).around(testFixture);
 
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    mojo.setProject("some-project");
-    mojo.setVersion("some-version");
-  }
-
   @Test
   @Parameters({"jar", "war"})
   public void testDeployFlexible(String packaging)
       throws MojoExecutionException, AppEngineException {
-    when(mavenProject.getPackaging()).thenReturn(packaging);
-    when(mavenProject.getBasedir()).thenReturn(tempFolder.getRoot());
+    when(mojo.getMavenProject().getPackaging()).thenReturn(packaging);
 
     mojo.execute();
 
