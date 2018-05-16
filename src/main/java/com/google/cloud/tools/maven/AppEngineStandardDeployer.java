@@ -87,7 +87,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deploy(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -97,7 +97,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployCron(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -107,7 +107,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployDispatch(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
@@ -117,7 +117,7 @@ public class AppEngineStandardDeployer implements AppEngineDeployer {
     try {
       deployMojo.getAppEngineFactory().deployment().deployDos(deployMojo);
     } catch (AppEngineException ex) {
-      throw new MojoExecutionException("Failed to Deploy", ex);
+      throw new MojoExecutionException("Failed to deploy", ex);
     }
   }
 
