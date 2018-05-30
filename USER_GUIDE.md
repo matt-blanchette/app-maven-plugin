@@ -35,12 +35,12 @@ For App Engine standard, the plugin exposes the following goals :
 
 #### Local Run
 
-| Goal               | Description |
-| ------------------ | ----------- |
-| `run`              | Run the application locally. |
-| `start`            | Start the application in the background. |
-| `stop`             | Stop a running application. |
-| `genRepoInfoFiles` | Generates repository information files for the Stackdriver Debugger. |
+| Goal              | Description |
+| ----------------- | ----------- |
+| `run`             | Run the application locally. |
+| `start`           | Start the application in the background. |
+| `stop`            | Stop a running application. |
+| `genRepoInfoFile` | Generates repository information files for the Stackdriver Debugger. |
 
 #### Deployment
 
