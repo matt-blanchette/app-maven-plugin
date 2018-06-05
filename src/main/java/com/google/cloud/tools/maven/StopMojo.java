@@ -69,7 +69,7 @@ public class StopMojo extends CloudSdkMojo implements StopConfiguration {
     } catch (CloudSdkNotFoundException ex) {
       throw new MojoExecutionException("Stop failed", ex);
     } catch (AppEngineException ex) {
-      getLog().warn("Failed to stop server: " + ex.getMessage());
+      getLog().error("Failed to stop server: " + ex.getMessage());
     }
   }
 
