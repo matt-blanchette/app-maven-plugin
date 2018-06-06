@@ -5,6 +5,10 @@
 
 This Maven plugin provides goals to build and deploy Google App Engine applications.
 
+| 2.0 Release Candidates are Live |
+| :------------------------------ |
+| 2.0-rc have been published. The behavior of the appengine-maven-plugin has changed since v1.+, please see the [CHANGELOG](CHANGELOG.md) for a full list of changes and an updated [USER GUIDE](USER_GUIDE.md) for details. If you are having trouble using or updating your plugin, please file a [new issue](https://github.com/GoogleCloudPlatform/app-maven-plugin/issues).|
+
 # Reference Documentation
 
 App Engine Standard Environment:
