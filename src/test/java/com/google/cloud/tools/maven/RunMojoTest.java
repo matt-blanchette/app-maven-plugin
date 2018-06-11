@@ -30,6 +30,7 @@ import com.google.cloud.tools.maven.CloudSdkAppEngineFactory.SupportedDevServerV
 import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import junitparams.JUnitParamsRunner;
@@ -49,6 +50,11 @@ import org.mockito.MockitoAnnotations;
 
 @RunWith(JUnitParamsRunner.class)
 public class RunMojoTest extends AbstractDevServerTest {
+
+  private static final String STANDARD_PROJECT_WEBAPP =
+      "src/test/resources/projects/standard-project/src/main/webapp";
+  private static final String STANDARD_PROJECT_WEBAPP2 =
+      "src/test/resources/projects/standard-project/src/main/webapp-for-services";
 
   @InjectMocks private RunMojo runMojo;
 
@@ -95,12 +101,30 @@ public class RunMojoTest extends AbstractDevServerTest {
       throws MojoFailureException, MojoExecutionException, IOException, CloudSdkNotFoundException {
     runMojo.devserverVersion = version;
     setUpAppEngineWebXml();
-    runMojo.services = Collections.singletonList(new File("src/main/appengine"));
+    runMojo.services = Collections.singletonList(new File(STANDARD_PROJECT_WEBAPP));
     when(factoryMock.devServerRunSync(mockVersion)).thenReturn(devServerMock);
 
     runMojo.execute();
 
-    assertArrayEquals(new File[] {new File("src/main/appengine")}, runMojo.getServices().toArray());
+    assertArrayEquals(
+        new File[] {new File(STANDARD_PROJECT_WEBAPP)}, runMojo.getServices().toArray());
+  }
+
+  @Test
+  @Parameters({"1,V1", "2-alpha,V2ALPHA"})
+  public void testRun_servicesIsUsedMultiple(String version, SupportedDevServerVersion mockVersion)
+      throws MojoFailureException, MojoExecutionException, IOException, CloudSdkNotFoundException {
+    runMojo.devserverVersion = version;
+    setUpAppEngineWebXml();
+    runMojo.services =
+        Arrays.asList(new File(STANDARD_PROJECT_WEBAPP), new File(STANDARD_PROJECT_WEBAPP2));
+    when(factoryMock.devServerRunSync(mockVersion)).thenReturn(devServerMock);
+
+    runMojo.execute();
+
+    assertArrayEquals(
+        new File[] {new File(STANDARD_PROJECT_WEBAPP), new File(STANDARD_PROJECT_WEBAPP2)},
+        runMojo.getServices().toArray());
   }
 
   @Test
@@ -127,7 +151,7 @@ public class RunMojoTest extends AbstractDevServerTest {
       throws IOException, MojoExecutionException, MojoFailureException, AppEngineException {
     runMojo.devserverVersion = version;
     setUpAppEngineWebXml();
-    runMojo.services = Collections.singletonList(new File("src/main/appengine"));
+    runMojo.services = Collections.singletonList(new File(STANDARD_PROJECT_WEBAPP));
     runMojo.environment = Collections.singletonMap("envVarName", "envVarValue");
     when(factoryMock.devServerRunSync(mockVersion)).thenReturn(devServerMock);
     doNothing().when(devServerMock).run(captor.capture());
@@ -144,7 +168,7 @@ public class RunMojoTest extends AbstractDevServerTest {
       throws IOException, MojoExecutionException, MojoFailureException, AppEngineException {
     runMojo.devserverVersion = version;
     setUpAppEngineWebXml();
-    runMojo.services = Collections.singletonList(new File("src/main/appengine"));
+    runMojo.services = Collections.singletonList(new File(STANDARD_PROJECT_WEBAPP));
     runMojo.additionalArguments = ImmutableList.of("--ARG1", "--ARG2");
     when(factoryMock.devServerRunSync(mockVersion)).thenReturn(devServerMock);
     doNothing().when(devServerMock).run(captor.capture());
